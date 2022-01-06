@@ -4,6 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/BJP/AndroidStudioProjects/Reciepe_appkt/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
+        <entry key="..\:/Users/BJP/AndroidStudioProjects/Reciepe_appkt/app/src/main/res/layout/activity_main.xml" value="0.17074275362318841" />
+        <entry key="..\:/Users/BJP/AndroidStudioProjects/Reciepe_appkt/app/src/main/res/layout/fragment_blank.xml" value="0.17074275362318841" />
+        <entry key="..\:/Users/BJP/AndroidStudioProjects/Reciepe_appkt/app/src/main/res/layout/fragment_recipe_list.xml" value="0.17074275362318841" />
       </map>
     </option>
   </component>
