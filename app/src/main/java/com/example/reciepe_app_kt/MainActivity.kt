@@ -5,8 +5,8 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.reciepe_app_kt.domain.model.Recipe
 import com.example.reciepe_app_kt.network.RecipeService
-import com.example.reciepe_app_kt.network.model.RecipeNetworkEntity
-import com.example.reciepe_app_kt.network.model.RecipeNetworkMapper
+import com.example.reciepe_app_kt.network.model.RecipeDto
+import com.example.reciepe_app_kt.network.model.RecipeDtoMapper
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
@@ -36,14 +36,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         // example mapping of RecipeNetworkEntity <-> Recipe
-        val mapper = RecipeNetworkMapper()
+        val mapper = RecipeDtoMapper()
         val recipe = Recipe()
 
         //to the recipe
-        val networkEntity : RecipeNetworkEntity = mapper.mapToEntity(recipe)
+        val networkEntity : RecipeDto = mapper.mapFromDomainModel(recipe)
 
         //back to the recipe
-        val r : Recipe = mapper.mapFromEntity(networkEntity)
+        val r : Recipe = mapper.mapToDomainModel(networkEntity)
     }
 }
 
