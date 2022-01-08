@@ -5,6 +5,8 @@ import com.example.reciepe_app_kt.network.RecipeService
 import com.example.reciepe_app_kt.network.model.RecipeDtoMapper
 
 class RecipeRepository_impl(
+    // [RetrofitService] <- [Repository] <- [ViewModel]
+    // retrofit service passed as repository constructor arg
     private val recipeService: RecipeService,
     private val mapper : RecipeDtoMapper
 ) : RecipeRepository{
