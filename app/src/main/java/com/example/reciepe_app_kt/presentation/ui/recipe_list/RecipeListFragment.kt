@@ -33,7 +33,9 @@ class RecipeListFragment : Fragment() {
     val viewModel : RecipeListViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        println("RecipeListFragment:$viewModel")
+
+        println("FRAGMENT:${viewModel.getRepo()}")
+        println("FRAGMENT:${viewModel.getToken()}")
     }
 
     override fun onCreateView(
