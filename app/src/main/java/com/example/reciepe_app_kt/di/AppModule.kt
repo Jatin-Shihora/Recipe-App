@@ -1,7 +1,7 @@
 package com.example.reciepe_app_kt.di
 
 import android.content.Context
-import com.example.reciepe_app_kt.presentation.ui.BaseApplication
+import com.example.reciepe_app_kt.presentation.BaseApplication
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

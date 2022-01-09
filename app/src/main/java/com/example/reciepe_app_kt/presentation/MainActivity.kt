@@ -1,4 +1,4 @@
-package com.example.reciepe_app_kt.presentation.ui
+package com.example.reciepe_app_kt.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
