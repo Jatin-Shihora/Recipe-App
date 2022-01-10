@@ -26,6 +26,9 @@ constructor(
         // observe data from repository
         val recipes: MutableState<List<Recipe>> = mutableStateOf(listOf())
 
+        //For data persistence we need to declare it in viewModel
+        val query = mutableStateOf("vegetarian")
+
         init {
             newSearch()
         }
@@ -41,5 +44,10 @@ constructor(
                 recipes.value = result
             }
         }
+        //change the value of query here to pass it to RecipeListFragment
+        fun onQueryChanged(query:String){
+            this.query.value = query
+        }
+
 
 }
