@@ -25,8 +25,13 @@ constructor(
 
         // observe data from repository
         val recipes: MutableState<List<Recipe>> = mutableStateOf(listOf())
-        //get data from repository
+
         init {
+            newSearch()
+        }
+
+        //get data from repository
+        fun newSearch(){
             viewModelScope.launch {
                 val result = repository.search(
                     token = token,

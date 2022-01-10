@@ -1,23 +1,15 @@
 package com.example.reciepe_app_kt.presentation.ui.recipe_list
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.Text
-import androidx.compose.ui.Modifier
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
-import com.example.reciepe_app_kt.R
-import com.example.reciepe_app_kt.util.TAG
+import com.example.reciepe_app_kt.presentation.components.RecipeCard
 import dagger.hilt.android.AndroidEntryPoint
 
 /*
@@ -43,22 +35,15 @@ class RecipeListFragment : Fragment() {
             setContent {
                 //Live data reflection
                 val recipes = viewModel.recipes.value
-                //finding all the recipes with recipe.title
-                for (recipe in recipes){
-                    Log.d(TAG,"onCreateView:${recipe.title}")
-                }
-
-                Column(modifier = Modifier.padding(16.dp)) {
-
-                    Spacer(modifier = Modifier.padding(10.dp))
-                    Button(
-                        onClick = {
-                            findNavController().navigate(R.id.viewRecipe)
-                        }
-                    ) {
-                        Text(text = "To recipe Fragment")
+                //LazyColumn is the equivalent compose.ui of RecyclerView
+                LazyColumn{
+                    itemsIndexed(
+                        items=recipes
+                    ){
+                            index, recipe-> RecipeCard(recipe = recipe, onClick = {})
                     }
                 }
+
             }
         }
     }
