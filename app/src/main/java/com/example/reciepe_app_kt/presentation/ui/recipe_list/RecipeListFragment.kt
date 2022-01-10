@@ -5,13 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.TextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -32,6 +42,7 @@ class RecipeListFragment : Fragment() {
     // Instantiate ViewModel inside a single fragment
     val viewModel : RecipeListViewModel by viewModels()
 
+    @OptIn(ExperimentalComposeUiApi::class)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -48,16 +59,44 @@ class RecipeListFragment : Fragment() {
                 //val _query = savedInstanceState{ "Beef" }
 
                 Column{
-                    TextField(value = query,
-                        //value = _query.value,
-                        onValueChange = { newValue ->
-                            viewModel.onQueryChanged(newValue)
-                            //_query.value = newValue
-                        },
-                    )
-                    Spacer(modifier = Modifier.padding(10.dp))
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        color = MaterialTheme.colors.primary,
+                        elevation=8.dp,
+                    ){
+                            Row(modifier=Modifier.fillMaxWidth()) {
+                                val keyboardController = LocalSoftwareKeyboardController.current
+                                TextField(
+                                    modifier = Modifier
+                                        .fillMaxWidth(0.9f)
+                                        .padding(8.dp),
+                                    value = query,
+                                    //value = _query.value,
 
-
+                                    onValueChange = { newValue ->
+                                        viewModel.onQueryChanged(newValue)
+                                        //_query.value = newValue
+                                    },
+                                    label = {
+                                        Text(text = "Search")
+                                    },
+                                    keyboardOptions = KeyboardOptions(
+                                        keyboardType = KeyboardType.Text,
+                                        imeAction = ImeAction.Search
+                                    ),
+                                    leadingIcon = {
+                                        Icon(Icons.Filled.Search, "search")
+                                    },
+                                    keyboardActions = KeyboardActions(onSearch = {
+                                            viewModel.newSearch(query)
+                                        keyboardController?.hide()
+                                    }),
+                                    textStyle= TextStyle(color= MaterialTheme.colors.onSurface),
+                                    colors = TextFieldDefaults.textFieldColors(backgroundColor = MaterialTheme.colors.surface)
+                                )
+                            }
+                    }
                     //LazyColumn is the equivalent compose.ui of RecyclerView
                     LazyColumn{
                         itemsIndexed(
@@ -66,7 +105,6 @@ class RecipeListFragment : Fragment() {
                                 index, recipe-> RecipeCard(recipe = recipe, onClick = {})
                         }
                     }
-
                 }
             }
         }

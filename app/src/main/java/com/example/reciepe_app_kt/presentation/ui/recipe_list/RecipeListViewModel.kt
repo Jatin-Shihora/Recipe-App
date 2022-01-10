@@ -30,16 +30,16 @@ constructor(
         val query = mutableStateOf("vegetarian")
 
         init {
-            newSearch()
+            newSearch(query.value)
         }
 
         //get data from repository
-        fun newSearch(){
+        fun newSearch( query : String ){
             viewModelScope.launch {
                 val result = repository.search(
                     token = token,
                     page = 1,
-                    query = "soup",
+                    query = query,
                 )
                 recipes.value = result
             }
