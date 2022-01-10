@@ -27,7 +27,7 @@ constructor(
         val recipes: MutableState<List<Recipe>> = mutableStateOf(listOf())
 
         //For data persistence we need to declare it in viewModel
-        val query = mutableStateOf("vegetarian")
+        val query = mutableStateOf("")
 
         init {
             newSearch(query.value)

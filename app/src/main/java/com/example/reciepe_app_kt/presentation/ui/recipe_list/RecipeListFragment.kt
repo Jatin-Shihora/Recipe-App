@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -65,6 +67,7 @@ class RecipeListFragment : Fragment() {
                         color = MaterialTheme.colors.primary,
                         elevation=8.dp,
                     ){
+                        Column {
                             Row(modifier=Modifier.fillMaxWidth()) {
                                 val keyboardController = LocalSoftwareKeyboardController.current
                                 TextField(
@@ -89,13 +92,27 @@ class RecipeListFragment : Fragment() {
                                         Icon(Icons.Filled.Search, "search")
                                     },
                                     keyboardActions = KeyboardActions(onSearch = {
-                                            viewModel.newSearch(query)
+                                        viewModel.newSearch(query)
                                         keyboardController?.hide()
                                     }),
                                     textStyle= TextStyle(color= MaterialTheme.colors.onSurface),
                                     colors = TextFieldDefaults.textFieldColors(backgroundColor = MaterialTheme.colors.surface)
                                 )
                             }
+                            //Enables Horizontal row scrolling
+                            Row(
+                                modifier = Modifier.horizontalScroll(rememberScrollState())
+                            ) {
+                                for (category in getAllFoodCategories()) {
+                                    Text(
+                                        text = category.value,
+                                        style = MaterialTheme.typography.body2,
+                                        color = MaterialTheme.colors.secondary,
+                                        modifier = Modifier.padding(8.dp)
+                                    )
+                                }
+                            }
+                        }
                     }
                     //LazyColumn is the equivalent compose.ui of RecyclerView
                     LazyColumn{
