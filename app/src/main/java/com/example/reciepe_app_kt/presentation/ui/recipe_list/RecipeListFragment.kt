@@ -1,5 +1,6 @@
 package com.example.reciepe_app_kt.presentation.ui.recipe_list
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,6 +33,7 @@ import androidx.fragment.app.viewModels
 import com.example.reciepe_app_kt.presentation.components.FoodCategoryChip
 import com.example.reciepe_app_kt.presentation.components.RecipeCard
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 /*
 NOTE: whenever a fragment is marked with entrypoint for dependency injection
@@ -46,6 +49,7 @@ class RecipeListFragment : Fragment() {
     // Instantiate ViewModel inside a single fragment
     val viewModel : RecipeListViewModel by viewModels()
 
+    @SuppressLint("CoroutineCreationDuringComposition")
     @OptIn(ExperimentalComposeUiApi::class)
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -103,17 +107,28 @@ class RecipeListFragment : Fragment() {
                                     colors = TextFieldDefaults.textFieldColors(backgroundColor = MaterialTheme.colors.surface)
                                 )
                             }
+                            // jetpack compose scroll position tracking
+                            val scrollState = rememberScrollState()
+                            val coroutineScope = rememberCoroutineScope()
+
                             //Enables Horizontal row scrolling
                             Row(
-                                modifier = Modifier.horizontalScroll(rememberScrollState())
-                                    .padding(start=8.dp,bottom=8.dp )
-                            ) {
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 8.dp, bottom = 8.dp)
+                                    .horizontalScroll(scrollState),
+                            )  {
+                                // restore scroll position after rotation
+                                coroutineScope.launch{
+                                    scrollState.scrollTo(viewModel.categoryScrollPosition)
+                                }
                                 for (category in getAllFoodCategories()) {
                                     FoodCategoryChip(
                                         category = category.value,
                                         isSelected = selectedCategory == category,
                                         onSelectedCategoryChanged = {
-                                            viewModel.onSelectedCategoryChanged(it)
+                                            viewModel.onSelectedCategoryChanged(it)// it = category.value
+                                            viewModel.onChangeCategoryScrollPosition(scrollState.value)
                                                                     },
                                         onExecuteSearch = viewModel::newSearch
                                     )
