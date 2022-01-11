@@ -34,11 +34,11 @@ constructor(
         var categoryScrollPosition: Int = 0
 
         init {
-            newSearch()
+            onExecuteSearch()
         }
 
         //get data from repository
-        fun newSearch(){
+        fun onExecuteSearch(){
             viewModelScope.launch {
                 val result = repository.search(
                     token = token,
