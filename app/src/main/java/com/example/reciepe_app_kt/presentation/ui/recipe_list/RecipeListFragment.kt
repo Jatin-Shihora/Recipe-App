@@ -62,6 +62,8 @@ class RecipeListFragment : Fragment() {
                 // another way of persisting data is with savedInstanceState
                 //val _query = savedInstanceState{ "Beef" }
 
+                val selectedCategory = viewModel.selectedCategory.value
+
                 Column{
                     Surface(
                         modifier = Modifier
@@ -94,7 +96,7 @@ class RecipeListFragment : Fragment() {
                                         Icon(Icons.Filled.Search, "search")
                                     },
                                     keyboardActions = KeyboardActions(onSearch = {
-                                        viewModel.newSearch(query)
+                                        viewModel.newSearch()
                                         keyboardController?.hide()
                                     }),
                                     textStyle= TextStyle(color= MaterialTheme.colors.onSurface),
@@ -104,14 +106,16 @@ class RecipeListFragment : Fragment() {
                             //Enables Horizontal row scrolling
                             Row(
                                 modifier = Modifier.horizontalScroll(rememberScrollState())
+                                    .padding(start=8.dp,bottom=8.dp )
                             ) {
                                 for (category in getAllFoodCategories()) {
                                     FoodCategoryChip(
                                         category = category.value,
-                                        onExecuteSearch = {
-                                            viewModel.onQueryChanged(it)
-                                            viewModel.newSearch(it)
-                                        }
+                                        isSelected = selectedCategory == category,
+                                        onSelectedCategoryChanged = {
+                                            viewModel.onSelectedCategoryChanged(it)
+                                                                    },
+                                        onExecuteSearch = viewModel::newSearch
                                     )
                                 }
                             }
