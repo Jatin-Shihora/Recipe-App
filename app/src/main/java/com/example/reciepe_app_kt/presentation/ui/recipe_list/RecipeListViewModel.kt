@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.reciepe_app_kt.domain.model.Recipe
 import com.example.reciepe_app_kt.repository.RecipeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Named
@@ -33,6 +34,9 @@ constructor(
 
         var categoryScrollPosition: Int = 0
 
+        //observer of loading circular bar
+        val loading  = mutableStateOf(false)
+
         init {
             onExecuteSearch()
         }
@@ -40,14 +44,33 @@ constructor(
         //get data from repository
         fun onExecuteSearch(){
             viewModelScope.launch {
+                loading.value = true
+
+                resetSearchState()
+
+                delay(1000)
+
                 val result = repository.search(
                     token = token,
                     page = 1,
                     query = query.value,
                 )
                 recipes.value = result
+
+                loading.value = false
             }
         }
+
+
+        private fun resetSearchState() {
+            recipes.value = emptyList()
+            if (selectedCategory.value?.value != query.value) clearSelectedCategory()
+        }
+
+        private fun clearSelectedCategory() {
+            selectedCategory.value = null
+        }
+
         //change the value of query here to pass it to RecipeListFragment
         fun onQueryChanged(query:String){
             this.query.value = query
