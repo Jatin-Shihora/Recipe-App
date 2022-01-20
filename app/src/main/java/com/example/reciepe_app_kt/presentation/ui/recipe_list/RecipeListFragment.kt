@@ -5,12 +5,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.example.reciepe_app_kt.presentation.components.CircularIndeterminateProgressBar
+import com.example.reciepe_app_kt.presentation.components.RecipeCard
 import com.example.reciepe_app_kt.presentation.components.SearchAppBar
+import com.example.reciepe_app_kt.presentation.components.ShimmerRecipeCardItem
 import dagger.hilt.android.AndroidEntryPoint
 
 /*
@@ -59,22 +69,27 @@ class RecipeListFragment : Fragment() {
                         onSelectedCategoryChanged = viewModel::onSelectedCategoryChanged,
                         onChangedCategoryScrollPosition = viewModel::onChangeCategoryScrollPosition
                     )
+                                Box(
+                                    modifier = Modifier.fillMaxSize()
+                                ) {
 
-//                    Box(modifier = Modifier.fillMaxSize()){
-//
-//                        //LazyColumn is the equivalent compose.ui of RecyclerView
-//                        LazyColumn{
-//                            itemsIndexed(
-//                                items=recipes
-//                            ){
-//                                    index, recipe-> RecipeCard(recipe = recipe, onClick = {})
-//                            }
-//                        }
-//                        CircularIndeterminateProgressBar(isDisplayed = loading)
-//                    }
-
+                                    if (loading) {
+                                        ShimmerRecipeCardItem(
+                                            imageHeight = 250.dp, padding = 8.dp
+                                        )
+                                    } else {
+                                        LazyColumn(modifier = Modifier.padding(8.dp)) {
+                                            itemsIndexed(
+                                                items = recipes
+                                            ) { index, recipe ->
+                                                RecipeCard(recipe = recipe, onClick = {})
+                                            }
+                                        }
+                                    }
+                                    CircularIndeterminateProgressBar(isDisplayed = loading)
+                                }
+                            }
+                        }
+                    }
                 }
             }
-        }
-    }
-}
