@@ -11,17 +11,19 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.reciepe_app_kt.presentation.ui.recipe_list.FoodCategory
 import com.example.reciepe_app_kt.presentation.ui.recipe_list.getAllFoodCategories
 import kotlinx.coroutines.launch
@@ -37,12 +39,13 @@ fun SearchAppBar(
     scrollPosition: Int,
     selectedCategory: FoodCategory?,
     onSelectedCategoryChanged: (String) -> Unit,
-    onChangedCategoryScrollPosition: (Int) -> Unit
+    onChangedCategoryScrollPosition: (Int) -> Unit,
+    onToggleTheme :()->Unit,
 ){
     Surface(
         modifier = Modifier
             .fillMaxWidth(),
-        color = Color.White,
+        color = MaterialTheme.colors.surface,
         elevation=8.dp,
     ){
         Column {
@@ -76,6 +79,21 @@ fun SearchAppBar(
                     textStyle= TextStyle(color= MaterialTheme.colors.onSurface),
                     colors = TextFieldDefaults.textFieldColors(backgroundColor = MaterialTheme.colors.surface)
                 )
+                ConstraintLayout(
+                    modifier = Modifier.align(Alignment.CenterVertically)
+                ) {
+                    val menu = createRef()
+                    IconButton(
+                        onClick = onToggleTheme,
+                        modifier = Modifier.constrainAs(menu){
+                            end.linkTo(parent.end)
+                            top.linkTo(parent.top)
+                            bottom.linkTo(parent.bottom)
+                        }
+                    ) {
+                        Icon(Icons.Filled.MoreVert, "Toggle between light and dark theme")
+                    }
+                }
             }
             // jetpack compose scroll position tracking
             val scrollState = rememberScrollState()
