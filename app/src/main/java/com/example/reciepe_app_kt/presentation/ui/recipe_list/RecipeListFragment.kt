@@ -7,25 +7,26 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.rememberScaffoldState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.example.reciepe_app_kt.presentation.BaseApplication
-import com.example.reciepe_app_kt.presentation.components.CircularIndeterminateProgressBar
-import com.example.reciepe_app_kt.presentation.components.RecipeCard
-import com.example.reciepe_app_kt.presentation.components.SearchAppBar
-import com.example.reciepe_app_kt.presentation.components.ShimmerRecipeCardItem
+import com.example.reciepe_app_kt.presentation.components.*
 import com.example.reciepe_app_kt.ui.theme.Reciepe_appktTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /*
@@ -70,22 +71,42 @@ class RecipeListFragment : Fragment() {
 
                             val loading  = viewModel.loading.value
 
-                            Column{
+                            val scaffoldState = rememberScaffoldState()
 
-                                SearchAppBar(
-                                    query = query,
-                                    onQueryChanged = viewModel::onQueryChanged, // method references to delegate
-                                    onExecuteSearch = viewModel::onExecuteSearch,
-                                    scrollPosition = viewModel.categoryScrollPosition,
-                                    selectedCategory = selectedCategory,
-                                    onSelectedCategoryChanged = viewModel::onSelectedCategoryChanged,
-                                    onChangedCategoryScrollPosition = viewModel::onChangeCategoryScrollPosition,
-                                    onToggleTheme = {
-                                        application.toggleLightTheme()
-                                    }
-                                )
+                            Scaffold(
+                                topBar = {
+                                    SearchAppBar(
+                                        query = query,
+                                        onQueryChanged = viewModel::onQueryChanged, // method references to delegate
+                                        onExecuteSearch = {
+                                            if (viewModel.selectedCategory.value?.value == "Milk") {
+                                                lifecycleScope.launch {
+                                                    scaffoldState.snackbarHostState.showSnackbar(
+                                                        message = "Invalid category: MILK!",
+                                                        actionLabel = "Hide",
+                                                    )
+                                                }
+                                            } else run {
+                                                viewModel.onExecuteSearch()
+                                            }
+                                        },
+                                        scrollPosition = viewModel.categoryScrollPosition,
+                                        selectedCategory = selectedCategory,
+                                        onSelectedCategoryChanged = viewModel::onSelectedCategoryChanged,
+                                        onChangedCategoryScrollPosition = viewModel::onChangeCategoryScrollPosition,
+                                        onToggleTheme = {
+                                            application.toggleLightTheme()
+                                        }
+                                    )
+                                },
+                                scaffoldState = scaffoldState,
+                                snackbarHost = {
+                                    scaffoldState.snackbarHostState
+                                }
+                            ) {
                                 Box(
-                                    modifier = Modifier.fillMaxSize()
+                                    modifier = Modifier
+                                        .fillMaxSize()
                                         .background(color = MaterialTheme.colors.background)
                                 ) {
 
@@ -103,6 +124,12 @@ class RecipeListFragment : Fragment() {
                                         }
                                     }
                                     CircularIndeterminateProgressBar(isDisplayed = loading)
+                                    DefaultSnackbar(snackbarHostState =scaffoldState.snackbarHostState,
+                                    onDismiss = {
+                                        scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
+                                    },
+                                        modifier = Modifier.align(Alignment.BottomCenter)
+                                    )
                                 }
                             }
                         }
