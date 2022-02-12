@@ -71,6 +71,8 @@ class RecipeListFragment : Fragment() {
 
                             val loading  = viewModel.loading.value
 
+                            val page = viewModel.page.value
+
                             val scaffoldState = rememberScaffoldState()
 
                             Scaffold(
@@ -78,7 +80,8 @@ class RecipeListFragment : Fragment() {
                                     SearchAppBar(
                                         query = query,
                                         onQueryChanged = viewModel::onQueryChanged, // method references to delegate
-                                        onExecuteSearch = {
+                                        onExecuteSearch = //viewModel::onExecuteSearch,
+                                         {
                                             if (viewModel.selectedCategory.value?.value == "Milk") {
                                                 lifecycleScope.launch {
                                                     scaffoldState.snackbarHostState.showSnackbar(
@@ -110,7 +113,7 @@ class RecipeListFragment : Fragment() {
                                         .background(color = MaterialTheme.colors.background)
                                 ) {
 
-                                    if (loading) {
+                                    if (loading && recipes.isEmpty()) {
                                         ShimmerRecipeCardItem(
                                             imageHeight = 250.dp, padding = 8.dp
                                         )
@@ -119,6 +122,10 @@ class RecipeListFragment : Fragment() {
                                             itemsIndexed(
                                                 items = recipes
                                             ) { index, recipe ->
+                                                viewModel.onChangeRecipeScrollPosition(index)
+                                                if((index + 1)>= (page * PAGE_SIZE) && !loading){
+                                                    viewModel.nextPage()
+                                                }
                                                 RecipeCard(recipe = recipe, onClick = {})
                                             }
                                         }
