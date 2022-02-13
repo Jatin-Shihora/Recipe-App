@@ -11,14 +11,12 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.example.reciepe_app_kt.presentation.BaseApplication
 import com.example.reciepe_app_kt.presentation.components.RecipeList
 import com.example.reciepe_app_kt.presentation.components.SearchAppBar
 import com.example.reciepe_app_kt.ui.theme.Reciepe_appktTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /*
@@ -72,19 +70,19 @@ class RecipeListFragment : Fragment() {
                                     SearchAppBar(
                                         query = query,
                                         onQueryChanged = viewModel::onQueryChanged, // method references to delegate
-                                        onExecuteSearch = //viewModel::onExecuteSearch,
-                                         {
-                                            if (viewModel.selectedCategory.value?.value == "Milk") {
-                                                lifecycleScope.launch {
-                                                    scaffoldState.snackbarHostState.showSnackbar(
-                                                        message = "Invalid category: MILK!",
-                                                        actionLabel = "Hide",
-                                                    )
-                                                }
-                                            } else run {
-                                                viewModel.onExecuteSearch()
-                                            }
-                                        },
+                                        onExecuteSearch = viewModel::onExecuteSearch,
+//                                         {
+//                                            if (viewModel.selectedCategory.value?.value == "Milk") {
+//                                                lifecycleScope.launch {
+//                                                    scaffoldState.snackbarHostState.showSnackbar(
+//                                                        message = "Invalid category: MILK!",
+//                                                        actionLabel = "Hide",
+//                                                    )
+//                                                }
+//                                            } else run {
+//                                                viewModel.onExecuteSearch()
+//                                            }
+//                                        },
                                         scrollPosition = viewModel.categoryScrollPosition,
                                         selectedCategory = selectedCategory,
                                         onSelectedCategoryChanged = viewModel::onSelectedCategoryChanged,
