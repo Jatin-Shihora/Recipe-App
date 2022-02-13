@@ -7,17 +7,15 @@ import android.view.ViewGroup
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.reciepe_app_kt.presentation.BaseApplication
-import com.example.reciepe_app_kt.presentation.components.CircularIndeterminateProgressBar
-import com.example.reciepe_app_kt.presentation.components.DefaultSnackbar
-import com.example.reciepe_app_kt.presentation.components.RecipeView
+import com.example.reciepe_app_kt.presentation.components.*
 import com.example.reciepe_app_kt.presentation.ui.recipe.RecipeEvent.GetRecipeEvent
 import com.example.reciepe_app_kt.ui.theme.Reciepe_appktTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -64,7 +62,7 @@ class RecipeFragment : Fragment(){
                     ) {
                         Box(modifier = Modifier.fillMaxSize()){
                             if (loading && recipe == null){
-                                Text("loading....")
+                                LoadingRecipeShimmer(imageHeight = IMAGE_HEIGHT.dp )
                             }
                             else{
                                 recipe?.let {
