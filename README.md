@@ -7,7 +7,7 @@
   <h3 align="center">Recipe App</h3>
 
   <p align="center">
-    Developing a app that fetches more than 3000 recipes with different types of dishes and shows user how to make those recipes . 
+    Developed a app that fetches more than 3000 recipes with different types of dishes and shows user how to make those recipes . 
     <br />
     <a href="https://github.com/Jatin-Shihora/Recipe-App"><strong>Explore the Repo »</strong></a>
     <br />
@@ -40,8 +40,6 @@
     <li><a href="#acknowledgements">Acknowledgements</a></li>
   </ol>
 </details>
-
-#### #Note: The app is still under development, many features are still to be developed so the images that you are viewing are till this point and will get updated as the app progresses.
 
 <!-- ABOUT THE PROJECT -->
 
